@@ -20,16 +20,14 @@ export class TasksController {
   constructor(private tasksService: TasksService) {
   }
 
-  /*
-      @Get()
-      getTasks(@Query() filterDto: GetTasksFilterDto): Task[] {
-        if (Object.keys(filterDto).length) {
-          return this.tasksService.getTasksWithFilters(filterDto);
-        } else {
-          return this.tasksService.getAllTasks();
-        }
-      }
-  */
+  @Get()
+  async getTasks(@Query() filterDto: GetTasksFilterDto): Promise<Task[]> {
+    /* if (Object.keys(filterDto).length) {
+       return this.tasksService.getTasksWithFilters(filterDto);
+     } else {*/
+    return await this.tasksService.getAllTasks();
+    // }
+  }
 
   @Get('/:id')
   getTaskById(@Param('id') id: number): Promise<Task> {
@@ -41,10 +39,12 @@ export class TasksController {
     return this.tasksService.createTask(createTaskDto);
   }
 
-  /*@Delete('/:id')
+  @Delete('/:id')
   deleteTaskById(@Param('id') id: string) {
     return this.tasksService.deleteTaskById(id);
   }
+
+  /*
 
   @Patch('/:id/status')
   updateTaskStatus(
