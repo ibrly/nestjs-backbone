@@ -8,7 +8,10 @@ import { JwtPayload } from './jwt-payload.interface';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(@InjectRepository(User) private userRepository: UsersRepository) {
+  constructor(
+    @InjectRepository(UsersRepository)
+    private userRepository: UsersRepository
+  ) {
     super({
       secretOrKey: 'topSecret51',
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
