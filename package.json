@@ -73,6 +73,7 @@
     ],
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
+    "collectCoverage": true,
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },

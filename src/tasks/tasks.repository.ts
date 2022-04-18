@@ -34,15 +34,14 @@ export class TasksRepository extends Repository<Task> {
       throw new InternalServerErrorException();
     }
   }
-
   async createTask(createTaskDto: CreateTaskDto, user: User): Promise<Task> {
     const task = this.create({
       ...createTaskDto,
       status: TaskStatus.OPEN,
       user,
     });
-    await this.save(task);
     try {
+      await this.save(task);
       return task;
     } catch (e) {
       this.logger.error(
