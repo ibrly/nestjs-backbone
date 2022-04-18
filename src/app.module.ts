@@ -8,7 +8,7 @@ import { configValidationSchema } from '../config.schema';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: [`.env.stage.${process.env.STAGE}`],
+      envFilePath: [`${process.env.STAGE}.env`],
       validationSchema: configValidationSchema,
     }),
 
@@ -16,8 +16,6 @@ import { configValidationSchema } from '../config.schema';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        console.log(process.env.STAGE);
-        console.log(configService.get('DB_HOST'));
         return {
           type: 'postgres',
           synchronize: true,
