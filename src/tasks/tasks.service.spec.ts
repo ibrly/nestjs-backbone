@@ -62,34 +62,28 @@ describe('TasksService', () => {
       expect(result).toEqual(mockTask);
     });
     it('calls TasksRepository.findOne and handles an error', function () {
-      tasksRepository.findOne.mockRejectedValue(null);
+      tasksRepository.findOne.mockResolvedValue(null);
       expect(service.getTasksById(1, mockUser)).rejects.toThrow(
         NotFoundException
       );
     });
   });
   describe('createTask', function () {
+    const mockTask = {
+      title: 'Test task',
+      description: 'Test desc',
+      id: 1,
+      status: TaskStatus.OPEN,
+      userId: mockUser.id,
+    };
+    const mockCreateTaskDto: CreateTaskDto = {
+      title: 'Test task',
+      description: 'Test desc',
+    };
     it('calls TasksRepository.createTask and returns a result', async () => {
-      const mockTask = {
-        title: 'Test task',
-        description: 'Test desc',
-        id: 1,
-        status: TaskStatus.OPEN,
-        userId: mockUser.id,
-      };
-      const mockCreateTaskDto: CreateTaskDto = {
-        title: 'Test task',
-        description: 'Test desc',
-      };
       tasksRepository.createTask.mockResolvedValue(mockTask);
       const result = await service.createTask(mockCreateTaskDto, mockUser);
       expect(result).toEqual(mockTask);
-    });
-    it('calls TasksRepository.findOne and handles an error', function () {
-      tasksRepository.findOne.mockRejectedValue(null);
-      expect(service.getTasksById(1, mockUser)).rejects.toThrow(
-        InternalServerErrorException
-      );
     });
   });
 });
