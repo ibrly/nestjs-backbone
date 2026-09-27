@@ -36,3 +36,6 @@ lerna-debug.log*
 # Environment (copy the *.env.example files)
 app.env
 db.env
+
+# Docker volumes
+/db
