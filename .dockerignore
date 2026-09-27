@@ -116,3 +116,9 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+
+# Local env and database files
+app.env
+db.env
+db
+.git
