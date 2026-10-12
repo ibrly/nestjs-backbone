@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TasksModule } from './tasks/tasks.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
+import { HealthModule } from './health/health.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from '../config.schema';
 
@@ -30,6 +31,7 @@ import { configValidationSchema } from '../config.schema';
     }),
     AuthModule,
     TasksModule,
+    HealthModule,
   ],
 })
 export class AppModule {}
