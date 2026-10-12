@@ -45,6 +45,12 @@ All variables are validated at startup by `config.schema.ts`.
 
 ## API
 
+### Health
+
+| Method | Route | Description |
+|--------|-------|-------------|
+| `GET` | `/health` | No auth. `200 {status: ok, database: up}`, or `503` when Postgres can't be reached |
+
 ### Auth
 
 | Method | Route | Description |
