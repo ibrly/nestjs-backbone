@@ -12,8 +12,8 @@ const mockTasksRepository = () => ({
   getTasks: jest.fn(),
   findOne: jest.fn(),
   createTask: jest.fn(),
-  deleteTask: jest.fn(),
-  updateTaskStatus: jest.fn(),
+  delete: jest.fn(),
+  save: jest.fn(),
 });
 const mockUser = {
   id: 12,
@@ -84,6 +84,22 @@ describe('TasksService', () => {
       tasksRepository.createTask.mockResolvedValue(mockTask);
       const result = await service.createTask(mockCreateTaskDto, mockUser);
       expect(result).toEqual(mockTask);
+    });
+  });
+  describe('deleteTaskById', function () {
+    it('deletes the task scoped to the user', async () => {
+      tasksRepository.delete.mockResolvedValue({ affected: 1 });
+      await expect(service.deleteTaskById(1, mockUser)).resolves.toBeUndefined();
+      expect(tasksRepository.delete).toHaveBeenCalledWith({
+        id: 1,
+        user: mockUser,
+      });
+    });
+    it('throws NotFoundException when nothing was deleted', async () => {
+      tasksRepository.delete.mockResolvedValue({ affected: 0 });
+      await expect(service.deleteTaskById(1, mockUser)).rejects.toThrow(
+        NotFoundException
+      );
     });
   });
 });
