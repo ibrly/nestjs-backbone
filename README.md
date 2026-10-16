@@ -7,7 +7,7 @@ A NestJS starter backbone with JWT authentication, a per-user task API, TypeORM 
 - NestJS + TypeScript
 - TypeORM with PostgreSQL
 - Passport JWT authentication
-- Joi config validation (`config.schema.ts`)
+- Joi config validation (`src/config.schema.ts`)
 - Jest unit tests
 - Docker Compose for local development
 
@@ -41,7 +41,7 @@ Make sure a Postgres instance matches the values in `app.env`.
 | `DB_USERNAME` / `DB_PASSWORD` / `DB_DATABASE` | Postgres credentials |
 | `JWT_SECRET` | Secret used to sign access tokens |
 
-All variables are validated at startup by `config.schema.ts`.
+All variables are validated at startup by `src/config.schema.ts`.
 
 ## API
 
