@@ -61,9 +61,9 @@ describe('TasksService', () => {
       const result = await service.getTasksById(1, mockUser);
       expect(result).toEqual(mockTask);
     });
-    it('calls TasksRepository.findOne and handles an error', function () {
+    it('calls TasksRepository.findOne and handles an error', async () => {
       tasksRepository.findOne.mockResolvedValue(null);
-      expect(service.getTasksById(1, mockUser)).rejects.toThrow(
+      await expect(service.getTasksById(1, mockUser)).rejects.toThrow(
         NotFoundException
       );
     });
