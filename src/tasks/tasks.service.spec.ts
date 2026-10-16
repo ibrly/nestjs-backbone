@@ -89,7 +89,9 @@ describe('TasksService', () => {
   describe('deleteTaskById', function () {
     it('deletes the task scoped to the user', async () => {
       tasksRepository.delete.mockResolvedValue({ affected: 1 });
-      await expect(service.deleteTaskById(1, mockUser)).resolves.toBeUndefined();
+      await expect(
+        service.deleteTaskById(1, mockUser)
+      ).resolves.toBeUndefined();
       expect(tasksRepository.delete).toHaveBeenCalledWith({
         id: 1,
         user: mockUser,
@@ -100,6 +102,37 @@ describe('TasksService', () => {
       await expect(service.deleteTaskById(1, mockUser)).rejects.toThrow(
         NotFoundException
       );
+    });
+  });
+  describe('updateTaskStatus', function () {
+    it("saves the new status on the user's task", async () => {
+      const mockTask = {
+        title: 'Test task',
+        description: 'Test desc',
+        id: 1,
+        status: TaskStatus.OPEN,
+      };
+      tasksRepository.findOne.mockResolvedValue(mockTask);
+      const result = await service.updateTaskStatus(
+        1,
+        { status: TaskStatus.DONE },
+        mockUser
+      );
+      expect(result.status).toEqual(TaskStatus.DONE);
+      expect(tasksRepository.findOne).toHaveBeenCalledWith({
+        id: 1,
+        user: mockUser,
+      });
+      expect(tasksRepository.save).toHaveBeenCalledWith(
+        expect.objectContaining({ id: 1, status: TaskStatus.DONE })
+      );
+    });
+    it('throws NotFoundException and saves nothing for an unknown task', async () => {
+      tasksRepository.findOne.mockResolvedValue(null);
+      await expect(
+        service.updateTaskStatus(1, { status: TaskStatus.DONE }, mockUser)
+      ).rejects.toThrow(NotFoundException);
+      expect(tasksRepository.save).not.toHaveBeenCalled();
     });
   });
 });
