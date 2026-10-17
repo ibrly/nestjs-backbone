@@ -1,7 +1,7 @@
-import { ServiceUnavailableException } from '@nestjs/common';
+import { Logger, ServiceUnavailableException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getConnectionToken } from '@nestjs/typeorm';
-import { HealthController } from './health.controller';
+import { HEALTH_QUERY_TIMEOUT_MS, HealthController } from './health.controller';
 
 const mockConnection = () => ({
   query: jest.fn(),
@@ -37,5 +37,33 @@ describe('HealthController', () => {
     await expect(controller.check()).rejects.toThrow(
       ServiceUnavailableException
     );
+  });
+
+  it('logs why the database check failed', async () => {
+    const warn = jest.spyOn(Logger.prototype, 'warn').mockImplementation();
+    connection.query.mockRejectedValue(new Error('connection refused'));
+    await expect(controller.check()).rejects.toThrow(
+      ServiceUnavailableException
+    );
+    expect(warn).toHaveBeenCalledWith(
+      'Database health check failed: connection refused'
+    );
+    warn.mockRestore();
+  });
+
+  it('throws 503 when the database does not answer in time', async () => {
+    jest.useFakeTimers();
+    const warn = jest.spyOn(Logger.prototype, 'warn').mockImplementation();
+    connection.query.mockReturnValue(new Promise(() => undefined));
+
+    const result = controller.check();
+    jest.advanceTimersByTime(HEALTH_QUERY_TIMEOUT_MS);
+
+    await expect(result).rejects.toThrow(ServiceUnavailableException);
+    expect(warn).toHaveBeenCalledWith(
+      `Database health check failed: SELECT 1 timed out after ${HEALTH_QUERY_TIMEOUT_MS}ms`
+    );
+    warn.mockRestore();
+    jest.useRealTimers();
   });
 });
