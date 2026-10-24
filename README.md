@@ -32,6 +32,15 @@ npm run start:dev
 
 Make sure a Postgres instance matches the values in `app.env`.
 
+### Production
+
+```bash
+npm run build
+npm run start:prod
+```
+
+`start:prod` sets `STAGE=prod`, so the app looks for a `prod.env` file. There is no `prod.env.example` on purpose: when the file is missing, the config module reads the variables from the process environment instead. Set them in your host or container (see the table below) rather than committing a `prod.env`.
+
 ## Environment variables
 
 | Variable | Description |
