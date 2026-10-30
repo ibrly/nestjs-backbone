@@ -46,7 +46,7 @@ npm run start:prod
 | Variable | Description |
 |----------|-------------|
 | `STAGE` | Environment stage, e.g. `app` or `prod` |
-| `DB_HOST` / `DB_PORT` | Postgres host and port |
+| `DB_HOST` / `DB_PORT` | Postgres host and port (`DB_PORT` is optional, defaults to 5432) |
 | `DB_USERNAME` / `DB_PASSWORD` / `DB_DATABASE` | Postgres credentials |
 | `JWT_SECRET` | Secret used to sign access tokens |
 

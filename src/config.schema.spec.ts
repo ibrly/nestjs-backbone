@@ -25,10 +25,25 @@ describe('configValidationSchema', () => {
     expect(value.DB_PORT).toBe(6543);
   });
 
+  it('defaults DB_PORT to 5432 when it is missing', () => {
+    const env = { ...validEnv };
+    delete env.DB_PORT;
+    const { error, value } = configValidationSchema.validate(env);
+    expect(error).toBeUndefined();
+    expect(value.DB_PORT).toBe(5432);
+  });
+
+  it.each(['abc', '70000'])('rejects DB_PORT=%s', (port) => {
+    const { error } = configValidationSchema.validate({
+      ...validEnv,
+      DB_PORT: port,
+    });
+    expect(error?.message).toContain('DB_PORT');
+  });
+
   it.each([
     'STAGE',
     'DB_HOST',
-    'DB_PORT',
     'DB_USERNAME',
     'DB_PASSWORD',
     'DB_DATABASE',
